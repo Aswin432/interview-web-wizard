@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
-import { Doctor } from '@/data/mockDoctors';
+import { Doctor } from '@/types/doctor';
 
 interface FilterPanelProps {
   doctors: Doctor[];
@@ -23,7 +23,11 @@ const FilterPanel = ({ doctors, onConsultationChange, onSpecialtyChange, onSortC
   const allSpecialties = React.useMemo(() => {
     const specialtiesSet = new Set<string>();
     doctors.forEach(doctor => {
-      doctor.specialty.forEach(spec => specialtiesSet.add(spec));
+      // Handle both specialty and specialities
+      if (doctor.specialty) {
+        doctor.specialty.forEach(spec => specialtiesSet.add(spec));
+      }
+      doctor.specialities.forEach(spec => specialtiesSet.add(spec.name));
     });
     return Array.from(specialtiesSet).sort();
   }, [doctors]);

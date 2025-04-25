@@ -124,7 +124,7 @@ const Index = () => {
     } else {
       // Filter was changed/cleared
       setFilteredDoctors(doctors);
-      setSearchTerm(doctors === mockDoctors ? "" : searchTerm);
+      setSearchTerm(doctors.length === 0 ? "" : searchTerm);
     }
   };
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import debounce from 'lodash/debounce';
-import { Doctor } from '@/data/mockDoctors';
+import { Doctor } from '@/types/doctor';
 
 interface AutocompleteHeaderProps {
   doctors: Doctor[];
@@ -69,7 +69,7 @@ const AutocompleteHeader = ({ doctors, onSearch }: AutocompleteHeaderProps) => {
           <div className="absolute mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden z-50 transition-all duration-200">
             {suggestions.map((doctor, index) => (
               <div
-                key={doctor.name}
+                key={doctor.id}
                 data-testid="suggestion-item"
                 onClick={() => handleSuggestionClick(doctor)}
                 className={`px-4 py-3 cursor-pointer hover:bg-purple-50 transition-colors duration-150
@@ -78,7 +78,7 @@ const AutocompleteHeader = ({ doctors, onSearch }: AutocompleteHeaderProps) => {
               >
                 <div className="font-medium text-gray-800">{doctor.name}</div>
                 <div className="text-sm text-gray-500">
-                  {doctor.specialty.join(', ')} • {doctor.experience}
+                  {doctor.specialty?.join(', ') || doctor.specialities.map(s => s.name).join(', ')} • {doctor.experience}
                 </div>
               </div>
             ))}
