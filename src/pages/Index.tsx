@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AutocompleteHeader from "@/components/AutocompleteHeader";
@@ -15,12 +14,20 @@ const Index = () => {
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  
+
   // URL query params
-  const [searchTerm, setSearchTerm] = useState<string>(searchParams.get("search") || "");
-  const [consultationMode, setConsultationMode] = useState<string | null>(searchParams.get("consultation"));
-  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(searchParams.getAll("specialty"));
-  const [sortOption, setSortOption] = useState<string | null>(searchParams.get("sort"));
+  const [searchTerm, setSearchTerm] = useState<string>(
+    searchParams.get("search") || ""
+  );
+  const [consultationMode, setConsultationMode] = useState<string | null>(
+    searchParams.get("consultation")
+  );
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(
+    searchParams.getAll("specialty")
+  );
+  const [sortOption, setSortOption] = useState<string | null>(
+    searchParams.get("sort")
+  );
 
   // Fetch doctors data
   useEffect(() => {
@@ -50,22 +57,22 @@ const Index = () => {
 
     // Apply search filter
     if (searchTerm) {
-      result = result.filter(doctor => 
+      result = result.filter((doctor) =>
         doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Apply consultation mode filter
     if (consultationMode) {
-      result = result.filter(doctor => 
+      result = result.filter((doctor) =>
         doctor.consultationMode?.includes(consultationMode)
       );
     }
 
     // Apply specialty filters
     if (selectedSpecialties.length > 0) {
-      result = result.filter(doctor =>
-        doctor.specialty?.some(spec => selectedSpecialties.includes(spec))
+      result = result.filter((doctor) =>
+        doctor.specialty?.some((spec) => selectedSpecialties.includes(spec))
       );
     }
 
@@ -88,19 +95,25 @@ const Index = () => {
   // Update URL params when filters change
   useEffect(() => {
     const params = new URLSearchParams();
-    
+
     if (searchTerm) params.set("search", searchTerm);
     if (consultationMode) params.set("consultation", consultationMode);
-    
+
     // Clear existing specialty params and add new ones
-    selectedSpecialties.forEach(spec => {
+    selectedSpecialties.forEach((spec) => {
       params.append("specialty", spec);
     });
-    
+
     if (sortOption) params.set("sort", sortOption);
-    
+
     setSearchParams(params);
-  }, [searchTerm, consultationMode, selectedSpecialties, sortOption, setSearchParams]);
+  }, [
+    searchTerm,
+    consultationMode,
+    selectedSpecialties,
+    sortOption,
+    setSearchParams,
+  ]);
 
   // Load params from URL on initial load
   useEffect(() => {
@@ -118,13 +131,9 @@ const Index = () => {
   // Handler for search input
   const handleSearch = (doctors: Doctor[]) => {
     if (doctors.length === 1) {
-      // If a specific doctor is clicked
-      const doctor = doctors[0];
-      setSearchTerm(doctor.name);
+      setSearchTerm(doctors[0].name);
     } else {
-      // Filter was changed/cleared
-      setFilteredDoctors(doctors);
-      setSearchTerm(doctors.length === 0 ? "" : searchTerm);
+      setSearchTerm(""); // clear search term if input is empty
     }
   };
 
@@ -146,7 +155,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <AutocompleteHeader doctors={doctors} onSearch={handleSearch} />
-      
+
       <div className="max-w-7xl mx-auto mt-8 px-4 flex flex-col md:flex-row gap-8">
         {/* Filter Panel */}
         <aside className="w-full md:w-1/4">
@@ -158,29 +167,33 @@ const Index = () => {
               <Skeleton className="h-48 w-full" />
             </div>
           ) : (
-            <FilterPanel 
-              doctors={doctors} 
-              onConsultationChange={handleConsultationChange} 
-              onSpecialtyChange={handleSpecialtyChange} 
-              onSortChange={handleSortChange} 
+            <FilterPanel
+              doctors={doctors}
+              onConsultationChange={handleConsultationChange}
+              onSpecialtyChange={handleSpecialtyChange}
+              onSortChange={handleSortChange}
             />
           )}
         </aside>
-        
+
         {/* Main Content */}
         <main className="w-full md:w-3/4">
           {/* Doctors Count */}
           <div className="mb-4">
             <p className="text-gray-600">
-              {filteredDoctors.length} doctor{filteredDoctors.length !== 1 ? 's' : ''} found
+              {filteredDoctors.length} doctor
+              {filteredDoctors.length !== 1 ? "s" : ""} found
             </p>
           </div>
-          
+
           {/* Doctor List */}
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[...Array(4)].map((_, index) => (
-                <div key={index} className="rounded-lg overflow-hidden shadow-md">
+                <div
+                  key={index}
+                  className="rounded-lg overflow-hidden shadow-md"
+                >
                   <Skeleton className="h-48 w-full" />
                 </div>
               ))}
