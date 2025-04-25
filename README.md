@@ -1,40 +1,46 @@
-# Doctor Listing Platform
+# 🩺 Doctor Directory App
 
-A modern web application for browsing, filtering, and managing doctor profiles. Built with **Vite**, **React**, **TypeScript**, **Tailwind CSS**, and **ShadCN UI**. 
+A responsive, filterable doctor directory built with React. Users can search for doctors, filter by consultation mode and specialty, and sort by fees or experience. The doctor data is fetched from a mock API.
 
-## Features
+**Live Demo**: [https://interview-web-wizard.vercel.app/)
 
-- Browse and search doctors with ease
-- Category and location-based filtering
-- Responsive, accessible UI components powered by ShadCN and Radix UI
-- Form validation with `react-hook-form` and `zod`
-- Fast, optimized frontend using Vite and React
-- Theming support via `next-themes`
-- API state management with TanStack Query
+---
 
-## Tech Stack
+## 🚀 Features
 
-- **Frontend:** React, TypeScript, Vite
-- **Styling:** Tailwind CSS, ShadCN UI
-- **UI Components:** Radix UI, Lucide React Icons
-- **Forms & Validation:** React Hook Form, Zod
-- **State Management:** TanStack Query
-- **Charts:** Recharts
-- **Routing:** React Router
+- 🔍 **Autocomplete search** for doctors by name
+- 🗓️ **Filter by consultation mode**:
+  - Video Consult
+  - In Clinic
+- 🩺 **Filter by 20+ specialties** (e.g., Cardiologist, Dermatologist, Psychologist)
+- 📊 **Sort by**:
+  - Fees (Low to High)
+  - Experience (High to Low)
+- 🔗 **URL-based query parameters** (sharable/bookmarkable)
+- 📱 **Responsive design** using TailwindCSS
 
-## Getting Started
+---
 
-### Prerequisites
+## 🧰 Tech Stack
 
-- Node.js (v18 or above)
-- pnpm / npm / yarn
+- **Frontend**: React
+- **Styling**: TailwindCSS
+- **API**: [Mock JSON](https://mockapi.io/)
+- **Deployment**: Vercel
 
-### Installation
+---
+
+## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/doctor-listing.git
-cd doctor-listing
-pnpm install
+# Clone the repository
+git clone https://github.com/your-username/doctor-directory-app.git
 
-# Live Demo: https://interview-web-wizard.vercel.app/
-# GitHub Repo: https://github.com/your-username/doctor-listing
+# Navigate into the project directory
+cd doctor-directory-app
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
