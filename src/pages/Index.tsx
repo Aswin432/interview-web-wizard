@@ -4,14 +4,17 @@ import { useSearchParams } from "react-router-dom";
 import AutocompleteHeader from "@/components/AutocompleteHeader";
 import FilterPanel from "@/components/FilterPanel";
 import DoctorList from "@/components/DoctorList";
-import { Doctor, mockDoctors } from "@/data/mockDoctors";
+import { Doctor } from "@/types/doctor";
+import { fetchDoctors } from "@/services/doctorApi";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
   
   // URL query params
   const [searchTerm, setSearchTerm] = useState<string>(searchParams.get("search") || "");
@@ -21,25 +24,25 @@ const Index = () => {
 
   // Fetch doctors data
   useEffect(() => {
-    const fetchDoctors = async () => {
+    const getDoctors = async () => {
       setLoading(true);
       try {
-        // In a real app, this would be an API call
-        // const response = await fetch("https://srijandubey.github.io/campus-api-mock/SRM-C1-25.json");
-        // const data = await response.json();
-        // setDoctors(data);
-        
-        // Using mock data for now
-        setDoctors(mockDoctors);
+        const data = await fetchDoctors();
+        setDoctors(data);
+        setFilteredDoctors(data);
       } catch (error) {
-        console.error("Error fetching doctors:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch doctors. Please try again later.",
+        });
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDoctors();
-  }, []);
+    getDoctors();
+  }, [toast]);
 
   // Apply all filters and sorts
   useEffect(() => {
@@ -62,14 +65,14 @@ const Index = () => {
     // Apply specialty filters
     if (selectedSpecialties.length > 0) {
       result = result.filter(doctor =>
-        doctor.specialty.some(spec => selectedSpecialties.includes(spec))
+        doctor.specialty?.some(spec => selectedSpecialties.includes(spec))
       );
     }
 
     // Apply sort
     if (sortOption) {
       if (sortOption === "fees") {
-        result.sort((a, b) => a.fees - b.fees);
+        result.sort((a, b) => Number(a.fees) - Number(b.fees));
       } else if (sortOption === "experience") {
         result.sort((a, b) => {
           const expA = parseInt(a.experience, 10);
